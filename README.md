@@ -63,6 +63,8 @@ npm run build
 
 ## 许可证
 
+⚠️ **本整活项目采用 GPL-3.0 协议**，商用或二改请自觉开源，否则作者保留在梦里起诉你的权利。
+
 本项目使用 **GNU General Public License v3.0** 许可证开源。详见 [LICENSE](./LICENSE) 文件。
 
 ## 致谢
