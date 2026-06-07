@@ -37,7 +37,8 @@ function updateScoreDisplay() {
  * 更新生命值显示
  */
 function updateLivesDisplay() {
-  livesDisplay.textContent = '❤'.repeat(gameState.lives) + '🖤'.repeat(CONFIG.INITIAL_LIVES - gameState.lives)
+  const lives = Math.max(0, Math.min(gameState.lives, CONFIG.MAX_LIVES))
+  livesDisplay.textContent = '❤'.repeat(lives) + '🖤'.repeat(Math.max(0, CONFIG.MAX_LIVES - lives))
 }
 
 /**

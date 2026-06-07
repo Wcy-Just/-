@@ -7,7 +7,9 @@ export const CONFIG = {
   SHOOT_DELAY: 200,
   INVINCIBLE_TIME: 2000,
   ENEMY_SPAWN_RATE: 0.02,
-  INITIAL_LIVES: 3
+  PACKAGE_SPAWN_RATE: 0.005,
+  INITIAL_LIVES: 3,
+  MAX_LIVES: 5
 }
 
 // 游戏状态
@@ -36,13 +38,17 @@ export const player = {
   color: '#007acc',
   lastShot: 0,
   invincible: false,
-  invincibleTime: 0
+  invincibleTime: 0,
+  hasVite: false,
+  viteEndTime: 0,
+  subEditors: []
 }
 
 // 游戏对象数组
 let _bullets = []
 let _enemies = []
 let _particles = []
+let _packages = []
 
 export const bullets = {
   get value() { return _bullets },
@@ -59,6 +65,11 @@ export const particles = {
   set value(newVal) { _particles = newVal }
 }
 
+export const packages = {
+  get value() { return _packages },
+  set value(newVal) { _packages = newVal }
+}
+
 // 武器和敌人类型
 export const bulletTypes = ['console.log', 'return', 'break', 'continue', 'import', 'export', 'if', 'else']
 
@@ -67,10 +78,48 @@ export const enemyTypes = [
   { text: 'error', color: '#ffd93d', speed: 1.5, health: 2, points: 20 },
   { text: 'warning', color: '#9b59b6', speed: 3, health: 1, points: 15 },
   { text: 'undefined', color: '#e74c3c', speed: 4, health: 1, points: 25 },
-  { text: 'null', color: '#3498db', speed: 2.5, health: 1, points: 18 },
+  { 
+    text: 'null', 
+    color: '#3498db', 
+    speed: 2.5, 
+    health: 1, 
+    points: 18,
+    special: 'invisible',
+    invisibleUntil: 0.7
+  },
   { text: 'NaN', color: '#2ecc71', speed: 3.5, health: 1, points: 22 },
   { text: 'todo', color: '#f39c12', speed: 1.8, health: 2, points: 28 },
-  { text: 'fixme', color: '#e91e63', speed: 2.8, health: 1, points: 16 }
+  { text: 'fixme', color: '#e91e63', speed: 2.8, health: 1, points: 16 },
+  { 
+    text: 'NullPointerException', 
+    color: '#ff0000', 
+    speed: 2.2, 
+    health: 1, 
+    points: 30,
+    special: 'escapes'
+  }
+]
+
+// Package 类型
+export const packageTypes = [
+  {
+    text: 'Vite',
+    color: '#646cff',
+    effect: 'vite',
+    duration: 15000
+  },
+  {
+    text: 'ESLint',
+    color: '#4b32c3',
+    effect: 'eslint',
+    duration: 0
+  },
+  {
+    text: 'Git',
+    color: '#f05032',
+    effect: 'git',
+    duration: 0
+  }
 ]
 
 // 重置游戏状态函数
@@ -80,9 +129,13 @@ export function resetGame() {
   player.x = CONFIG.CANVAS_WIDTH / 2
   player.y = 500
   player.invincible = false
+  player.hasVite = false
+  player.viteEndTime = 0
+  player.subEditors = []
   bullets.value = []
   enemies.value = []
   particles.value = []
+  packages.value = []
 }
 
 // 更新游戏状态
@@ -95,7 +148,7 @@ export function setScore(newScore) {
 }
 
 export function setLives(newLives) {
-  gameState.lives = newLives
+  gameState.lives = Math.max(0, Math.min(newLives, CONFIG.MAX_LIVES))
 }
 
 export function setAnimationId(id) {

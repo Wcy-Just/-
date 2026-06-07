@@ -1,4 +1,4 @@
-import { CONFIG, player, bullets, enemies, particles } from './game.js'
+import { CONFIG, player, bullets, enemies, particles, packages } from './game.js'
 
 /**
  * 绘制网格背景
@@ -112,13 +112,23 @@ export function drawBullets(ctx) {
  */
 export function drawEnemies(ctx) {
   enemies.value.forEach(enemy => {
+    let alpha = 1
+    
+    // 隐身效果
+    if (enemy.special === 'invisible') {
+      const progress = enemy.y / CONFIG.CANVAS_HEIGHT
+      if (progress < enemy.invisibleUntil) {
+        alpha = 0.2 + (progress / enemy.invisibleUntil) * 0.3
+      }
+    }
+    
     // 敌人背景
     ctx.fillStyle = enemy.color
-    ctx.globalAlpha = 0.3
+    ctx.globalAlpha = alpha * 0.3
     ctx.fillRect(enemy.x - 35, enemy.y - 15, 70, 30)
     
     // 敌人文字
-    ctx.globalAlpha = 1
+    ctx.globalAlpha = alpha
     ctx.font = 'bold 18px Courier New'
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
@@ -127,6 +137,69 @@ export function drawEnemies(ctx) {
     ctx.lineWidth = 3
     ctx.strokeText(enemy.text, enemy.x, enemy.y)
     ctx.fillText(enemy.text, enemy.x, enemy.y)
+  })
+  ctx.globalAlpha = 1
+}
+
+/**
+ * 绘制 Packages
+ * @param {CanvasRenderingContext2D} ctx - Canvas 上下文
+ */
+export function drawPackages(ctx) {
+  packages.value.forEach(pkg => {
+    // 包背景
+    ctx.fillStyle = pkg.color
+    ctx.globalAlpha = 0.6
+    ctx.fillRect(pkg.x - 25, pkg.y - 12, 50, 24)
+    
+    // 发光效果
+    ctx.strokeStyle = pkg.color
+    ctx.lineWidth = 2
+    ctx.strokeRect(pkg.x - 28, pkg.y - 15, 56, 30)
+    
+    // 文字
+    ctx.globalAlpha = 1
+    ctx.font = 'bold 14px Arial'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillStyle = '#ffffff'
+    ctx.fillText(pkg.text, pkg.x, pkg.y)
+  })
+}
+
+/**
+ * 绘制子编辑器（Vite 效果）
+ * @param {CanvasRenderingContext2D} ctx - Canvas 上下文
+ */
+export function drawSubEditors(ctx) {
+  if (!player.hasVite) return
+  
+  player.subEditors.forEach((sub, index) => {
+    const offset = index === 0 ? -50 : 50
+    
+    // 子编辑器主体
+    ctx.save()
+    ctx.globalAlpha = 0.7
+    ctx.fillStyle = '#1e1e1e'
+    ctx.fillRect(sub.x - 20, sub.y - 18, 40, 32)
+    
+    // 标题栏
+    ctx.fillStyle = '#2d2d2d'
+    ctx.fillRect(sub.x - 20, sub.y - 18, 40, 8)
+    
+    // Vite 标识
+    ctx.font = '10px Arial'
+    ctx.fillStyle = '#646cff'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+    ctx.fillText('V', sub.x + 10, sub.y - 14)
+    
+    // 边框
+    ctx.strokeStyle = '#646cff'
+    ctx.lineWidth = 2
+    ctx.strokeRect(sub.x - 20, sub.y - 18, 40, 32)
+    
+    ctx.restore()
   })
 }
 
@@ -162,5 +235,7 @@ export function render(ctx) {
   drawParticles(ctx)
   drawBullets(ctx)
   drawEnemies(ctx)
+  drawPackages(ctx)
+  drawSubEditors(ctx)
   drawPlayer(ctx)
 }
