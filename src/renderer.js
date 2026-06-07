@@ -22,7 +22,7 @@ export function drawGrid(ctx) {
 }
 
 /**
- * 绘制玩家飞船
+ * 绘制 VS Code 编辑器风格的玩家
  * @param {CanvasRenderingContext2D} ctx - Canvas 上下文
  */
 export function drawPlayer(ctx) {
@@ -32,36 +32,61 @@ export function drawPlayer(ctx) {
   
   ctx.save()
   
-  // 飞船主体
-  ctx.fillStyle = player.color
-  ctx.beginPath()
-  ctx.moveTo(player.x, player.y - 20)
-  ctx.lineTo(player.x - 25, player.y + 20)
-  ctx.lineTo(player.x + 25, player.y + 20)
-  ctx.closePath()
-  ctx.fill()
-  
-  // 飞船边框
-  ctx.strokeStyle = '#66d9ef'
-  ctx.lineWidth = 3
-  ctx.stroke()
-  
-  // 驾驶舱
+  // VS Code 窗口主体
   ctx.fillStyle = '#1e1e1e'
+  ctx.fillRect(player.x - 30, player.y - 25, 60, 45)
+  
+  // 标题栏
+  ctx.fillStyle = '#2d2d2d'
+  ctx.fillRect(player.x - 30, player.y - 25, 60, 12)
+  
+  // 窗口按钮
+  ctx.fillStyle = '#ff5f56'
   ctx.beginPath()
-  ctx.arc(player.x, player.y, 8, 0, Math.PI * 2)
+  ctx.arc(player.x - 22, player.y - 19, 3, 0, Math.PI * 2)
   ctx.fill()
+  
+  ctx.fillStyle = '#ffbd2e'
+  ctx.beginPath()
+  ctx.arc(player.x - 12, player.y - 19, 3, 0, Math.PI * 2)
+  ctx.fill()
+  
+  ctx.fillStyle = '#27ca3f'
+  ctx.beginPath()
+  ctx.arc(player.x - 2, player.y - 19, 3, 0, Math.PI * 2)
+  ctx.fill()
+  
+  // VS Code 图标
+  ctx.font = '16px Arial'
+  ctx.textAlign = 'center'
+  ctx.textBaseline = 'middle'
+  ctx.fillStyle = '#007acc'
+  ctx.fillText('< >', player.x + 15, player.y - 19)
+  
+  // 编辑器边框
+  ctx.strokeStyle = '#007acc'
+  ctx.lineWidth = 3
+  ctx.strokeRect(player.x - 30, player.y - 25, 60, 45)
+  
+  // 代码文本
+  ctx.font = '8px Courier New'
+  ctx.fillStyle = '#d4d4d4'
+  ctx.textAlign = 'left'
+  ctx.fillText('function ', player.x - 25, player.y - 5)
   ctx.fillStyle = '#4ec9b0'
-  ctx.beginPath()
-  ctx.arc(player.x, player.y, 5, 0, Math.PI * 2)
-  ctx.fill()
+  ctx.fillText('game', player.x + 2, player.y - 5)
+  ctx.fillStyle = '#d4d4d4'
+  ctx.fillText('()', player.x + 28, player.y - 5)
+  
+  ctx.fillStyle = '#d4d4d4'
+  ctx.fillText('  shoot();', player.x - 25, player.y + 5)
   
   // 引擎火焰
   ctx.fillStyle = '#ff6b35'
   ctx.beginPath()
-  ctx.moveTo(player.x - 10, player.y + 20)
+  ctx.moveTo(player.x - 15, player.y + 20)
   ctx.lineTo(player.x, player.y + 35 + Math.random() * 10)
-  ctx.lineTo(player.x + 10, player.y + 20)
+  ctx.lineTo(player.x + 15, player.y + 20)
   ctx.closePath()
   ctx.fill()
   
@@ -82,15 +107,26 @@ export function drawBullets(ctx) {
 }
 
 /**
- * 绘制敌人
+ * 绘制敌人（编程语言关键词）
  * @param {CanvasRenderingContext2D} ctx - Canvas 上下文
  */
 export function drawEnemies(ctx) {
   enemies.value.forEach(enemy => {
-    ctx.font = '36px Arial'
+    // 敌人背景
+    ctx.fillStyle = enemy.color
+    ctx.globalAlpha = 0.3
+    ctx.fillRect(enemy.x - 35, enemy.y - 15, 70, 30)
+    
+    // 敌人文字
+    ctx.globalAlpha = 1
+    ctx.font = 'bold 18px Courier New'
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
-    ctx.fillText(enemy.emoji, enemy.x, enemy.y)
+    ctx.fillStyle = enemy.color
+    ctx.strokeStyle = '#1e1e1e'
+    ctx.lineWidth = 3
+    ctx.strokeText(enemy.text, enemy.x, enemy.y)
+    ctx.fillText(enemy.text, enemy.x, enemy.y)
   })
 }
 

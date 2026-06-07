@@ -60,13 +60,17 @@ export const particles = {
 }
 
 // 武器和敌人类型
-export const bulletTypes = ['{', '}', ';', '(', ')', '[', ']']
+export const bulletTypes = ['console.log', 'return', 'break', 'continue', 'import', 'export', 'if', 'else']
 
 export const enemyTypes = [
-  { emoji: '🐛', color: '#ff6b6b', speed: 2, health: 1, points: 10 },
-  { emoji: '🐞', color: '#ffd93d', speed: 1.5, health: 2, points: 20 },
-  { emoji: '🕷️', color: '#9b59b6', speed: 3, health: 1, points: 15 },
-  { emoji: '🦟', color: '#e74c3c', speed: 4, health: 1, points: 25 }
+  { text: 'bug', color: '#ff6b6b', speed: 2, health: 1, points: 10 },
+  { text: 'error', color: '#ffd93d', speed: 1.5, health: 2, points: 20 },
+  { text: 'warning', color: '#9b59b6', speed: 3, health: 1, points: 15 },
+  { text: 'undefined', color: '#e74c3c', speed: 4, health: 1, points: 25 },
+  { text: 'null', color: '#3498db', speed: 2.5, health: 1, points: 18 },
+  { text: 'NaN', color: '#2ecc71', speed: 3.5, health: 1, points: 22 },
+  { text: 'todo', color: '#f39c12', speed: 1.8, health: 2, points: 28 },
+  { text: 'fixme', color: '#e91e63', speed: 2.8, health: 1, points: 16 }
 ]
 
 // 重置游戏状态函数
