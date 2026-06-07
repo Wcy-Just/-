@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>微软大战代码 - VS Code Wars</title>
+  </head>
+  <body>
+    <div id="game-container">
+      <canvas id="gameCanvas"></canvas>
+      
+      <div id="startScreen" class="screen">
+        <h1 class="title">
+          <span class="microsoft">微软</span>
+          <span class="battle">大战</span>
+          <span class="code">代码</span>
+        </h1>
+        <h2 class="subtitle">VS CODE WARS</h2>
+        <p class="description">保护代码编辑器，击退 Bug 入侵！</p>
+        <div class="controls">
+          <p><span class="key">←→↑↓</span> 或 <span class="key">WASD</span> 移动</p>
+          <p><span class="key">空格</span> 发射代码武器</p>
+        </div>
+        <button id="startBtn" class="btn">开始游戏</button>
+      </div>
+
+      <div id="gameOverScreen" class="screen hidden">
+        <h1 class="title">游戏结束</h1>
+        <p class="final-score">最终分数: <span id="finalScore">0</span></p>
+        <button id="restartBtn" class="btn">再来一局</button>
+      </div>
+
+      <div id="hud" class="hidden">
+        <div class="hud-item">
+          <span class="label">分数:</span>
+          <span id="score" class="value">0</span>
+        </div>
+        <div class="hud-item">
+          <span class="label">生命:</span>
+          <span id="lives" class="value">❤❤❤</span>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
